@@ -14,13 +14,17 @@ namespace SapperChain
         [SerializeField] private Tile _tilePrefab;
         private Tile[,] _tiles;
         public Tile[,] Tiles => _tiles;
+
+        public static int X;
+        public static int Y;
+        public static int Bombs;
         public Vector2Int Size { private set; get; }
         public int BombCount { private set; get; }
 
         private void Awake()
         {
             Instance = this;
-            Genarate(new(13, 7), 30);
+            Genarate(new(X, Y), Bombs);
         }
         private void Update()
         {
@@ -33,6 +37,7 @@ namespace SapperChain
         {
             if (size.x * size.y - 9 < bombCount)
                 return;
+            Tile.Restart();
             Size = size;
             BombCount = bombCount;
             _tiles = new Tile[Size.x, Size.y];

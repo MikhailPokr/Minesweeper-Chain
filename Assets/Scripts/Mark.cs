@@ -9,8 +9,8 @@ namespace SapperChain
         {
             _spriteRenderer = GetComponent<SpriteRenderer>();
             gameObject.SetActive(true);
-            if (chain > 9)
-                chain = 9;
+            if (chain > 8)
+                chain = 8;
             _spriteRenderer.sprite = BoardManager.Instance.SpriteManager.ChainMarks[chain - 1];
         }
     }

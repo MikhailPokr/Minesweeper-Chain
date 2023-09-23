@@ -203,6 +203,7 @@ MonoBehaviour:
   _mark2: {fileID: 6588382990935101657}
   _mark3: {fileID: 3221471204078954386}
   _mark4: {fileID: 6601449763530617703}
+  _holdTime: 0.2
 --- !u!61 &9205091669660910208
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -28,7 +28,40 @@ namespace SapperChain
         {
             _spriteRenderer = GetComponent<SpriteRenderer>();
             _position = new(x, y);
+            InputManager.Click += OnClick;
         }
+
+        private void OnClick(bool hold, Vector2 pos)
+        {
+            if (Vector2.Distance(transform.position, pos) > _spriteRenderer.size.x / 2)
+                return;
+
+            if (_firstMove)
+            {
+                _firstMove = false;
+                BoardManager.Instance.GenerateValues(_position);
+                Open(true);
+                return;
+            }
+
+            if ((_flagMode && hold) || (!_flagMode && !hold))
+            {
+                if (_flag)
+                    return;
+                if (!_open)
+                    Open();
+                else
+                    OpenNear();
+            }
+            else if ((_flagMode && !hold) || (!_flagMode && hold))
+            {
+                if (!_open)
+                    SetFlag(!_flag);
+                else
+                    OpenNear();
+            }
+        }
+
         public void Open(bool open = true)
         {
             if (_open == open)
@@ -153,6 +186,11 @@ namespace SapperChain
             }
         }
 
+        public static void Restart()
+        {
+            _firstMove = true;
+        }
+
         public void UpdateView()
         {
             if (_flag)
@@ -173,31 +211,9 @@ namespace SapperChain
                 _spriteRenderer.sprite = BoardManager.Instance.SpriteManager.Numbers[_num];
             }
         }
-
-        
-        public void OnMouseDown()
+        private void OnDisable()
         {
-            if (_firstMove)
-            {
-                _firstMove = false;
-                BoardManager.Instance.GenerateValues(_position);
-                Open(true);
-                return;
-            }
-            if (_flagMode)
-            {
-                if (!_open)
-                    SetFlag(!_flag);
-                else
-                    OpenNear();
-            }
-            else
-            {
-                if (!_open)
-                    Open();
-                else
-                    OpenNear();
-            }
+            InputManager.Click -= OnClick;
         }
     }
 }
