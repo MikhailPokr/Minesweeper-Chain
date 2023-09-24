@@ -26,18 +26,12 @@ namespace SapperChain
             Instance = this;
             Genarate(new(X, Y), Bombs);
         }
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Tab))
-            {
-                Tile._flagMode = !Tile._flagMode;
-            }
-        }
         private void Genarate(Vector2Int size, int bombCount)
         {
             if (size.x * size.y - 9 < bombCount)
                 return;
             Tile.Restart();
+            Options.RestartGame();
             Size = size;
             BombCount = bombCount;
             _tiles = new Tile[Size.x, Size.y];

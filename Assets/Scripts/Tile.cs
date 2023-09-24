@@ -6,7 +6,7 @@ namespace SapperChain
 {
     internal class Tile : MonoBehaviour
     {
-        public static bool _flagMode = true;
+        private static bool _flagMode = true;
         private static bool _firstMove = true;
         private Vector2Int _position;
 
@@ -24,12 +24,18 @@ namespace SapperChain
         private int _num = 0;
         public bool ItsBomb => _num == -1;
 
+        public delegate void FlagHandler(bool set);
+        public static event FlagHandler Flag;
+
         public void SetPosition(int x, int y)
         {
             _spriteRenderer = GetComponent<SpriteRenderer>();
             _position = new(x, y);
             InputManager.Click += OnClick;
         }
+
+        public static void ChangeMode() => _flagMode = !_flagMode;
+        public static void ChangeMode(bool on) => _flagMode = on;
 
         private void OnClick(bool hold, Vector2 pos)
         {
@@ -41,6 +47,7 @@ namespace SapperChain
                 _firstMove = false;
                 BoardManager.Instance.GenerateValues(_position);
                 Open(true);
+                Options.StartGame();
                 return;
             }
 
@@ -133,6 +140,7 @@ namespace SapperChain
         public void SetFlag(bool flag)
         {
             _flag = flag;
+            Flag?.Invoke(flag);
             UpdateView();
         }
         public void SetDelta(int delta)

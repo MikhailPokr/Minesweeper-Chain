@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace SapperChain
 {
@@ -10,7 +11,6 @@ namespace SapperChain
         private float minMouseWheelDeltaForPinch = 0.1f;
         private bool isDragging = false;
         private float initialDistance;
-        private Vector3 initialScale;
 
         public delegate void ClickHandler(bool hold, Vector2 pos);
         public static event ClickHandler Click;
@@ -38,6 +38,9 @@ namespace SapperChain
                     }
                 }
 
+                if (EventSystem.current.IsPointerOverGameObject())
+                    return;
+
                 if (Input.GetMouseButtonDown(0))
                 {
                     HandleClickOrDragStart(Input.mousePosition);
@@ -62,6 +65,8 @@ namespace SapperChain
                         switch (touch.phase)
                         {
                             case TouchPhase.Began:
+                                if (!EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+                                    break;
                                 HandleClickOrDragStart(touch.position);
                                 break;
 
@@ -85,12 +90,10 @@ namespace SapperChain
                         if (touch1.phase == TouchPhase.Began || touch2.phase == TouchPhase.Began)
                         {
                             initialDistance = Vector2.Distance(touch1.position, touch2.position);
-                            initialScale = transform.localScale;
                         }
                         else if (touch1.phase == TouchPhase.Moved || touch2.phase == TouchPhase.Moved)
                         {
                             float currentDistance = Vector2.Distance(touch1.position, touch2.position);
-                            float scaleFactor = currentDistance / initialDistance;
 
                             Resize((initialDistance - currentDistance)* 0.005f);
                         }
@@ -126,12 +129,13 @@ namespace SapperChain
             }
             else if (!isDragging && _holdTimer > _holdTime)
             {
-                Click.Invoke(true, Camera.main.ScreenToWorldPoint(touchStartPos));
+                Click?.Invoke(true, Camera.main.ScreenToWorldPoint(touchStartPos));
+                _holdTimer = -1;
             }
 
             if (isDragging)
             {
-                Vector2 dragDelta =  currentPos - touchStartPos;
+                Vector2 dragDelta = currentPos - touchStartPos;
                 Camera.main.transform.position += (Vector3)dragDelta.normalized * 5 * Time.deltaTime;
             }
         }

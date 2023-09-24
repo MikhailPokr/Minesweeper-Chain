@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -8,17 +9,17 @@ namespace SapperChain
     {
         [SerializeField] private InputField _sizeX;
         [SerializeField] private InputField _sizeY;
-        [SerializeField] private InputField _bombs;
+        [SerializeField] private Text _bombs;
+        private float _bombsPercent;
 
         private void Start()
         {
             _sizeX.onEndEdit.AddListener(SetSizeX);
             _sizeY.onEndEdit.AddListener(SetSizeY);
-            _bombs.onEndEdit.AddListener(SetBombs);
 
             SetSizeX(PlayerPrefs.GetInt("SizeX", 10).ToString());
             SetSizeY(PlayerPrefs.GetInt("SizeY", 10).ToString());
-            SetBombs(PlayerPrefs.GetInt("Bombs", 10).ToString());
+            SetBombPercent(PlayerPrefs.GetFloat("Bombs", 0.15f));
         }
         public void SetSizeX(string input)
         {
@@ -50,28 +51,15 @@ namespace SapperChain
             _sizeY.text = value.ToString();
             FixBombs();
         }
-        public void SetBombs(string input)
+        public void SetBombPercent(float value)
         {
-            int value = int.Parse(input);
-            if (value < 0)
-            {
-                value = -value;
-            }
-            BoardManager.Bombs = value;
-            _bombs.text = value.ToString();
+            _bombsPercent = value;
             FixBombs();
         }
-        public void FixBombs()
+        private void FixBombs()
         {
-            if (BoardManager.Bombs < 1)
-            {
-                BoardManager.Bombs = 1;
-            }
-            else if (BoardManager.Bombs > (BoardManager.X * BoardManager.Y) - 9)
-            {
-                BoardManager.Bombs = BoardManager.X * BoardManager.Y - 9;
-                _bombs.text = (BoardManager.X * BoardManager.Y - 9).ToString();
-            }
+            BoardManager.Bombs = Mathf.RoundToInt(BoardManager.X * BoardManager.Y * _bombsPercent);
+            _bombs.text = BoardManager.Bombs.ToString();
         }
 
         public void StartGame()
