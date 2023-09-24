@@ -1627,7 +1627,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: ff3ced2c3110d114c8a49d709316a237, type: 3}
-    m_FontSize: 162
+    m_FontSize: 113
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
@@ -1638,7 +1638,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Sapper:Chain
+  m_Text: Minesweeper:Chain
 --- !u!222 &1364997140
 CanvasRenderer:
   m_ObjectHideFlags: 0
