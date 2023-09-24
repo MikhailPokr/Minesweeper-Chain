@@ -120,6 +120,12 @@ namespace SapperChain
                         goto case 3;
                 }
             }
+
+            if (_num == -1)
+            {
+                Options.Instance.EndGame(false);
+            }
+
             UpdateView();
         }
 
@@ -199,6 +205,7 @@ namespace SapperChain
             _firstMove = true;
         }
 
+        public bool Check() => _flag || _open;
         public void UpdateView()
         {
             if (_flag)
@@ -217,6 +224,11 @@ namespace SapperChain
                     return;
                 }
                 _spriteRenderer.sprite = BoardManager.Instance.SpriteManager.Numbers[_num];
+            }
+
+            if (BoardManager.Instance.CheckWin())
+            {
+                Options.Instance.EndGame(true);
             }
         }
         private void OnDisable()

@@ -101,5 +101,17 @@ namespace SapperChain
                 return false;
             return true;
         }
+        public bool CheckWin()
+        {
+            for (int y = 0; y < Size.y; y++) 
+            {
+                for (int x = 0; x < Size.x; x++) 
+                {
+                    if (!_tiles[x, y].Check())
+                        return false;
+                }
+            }
+            return true;
+        }
     }
 }

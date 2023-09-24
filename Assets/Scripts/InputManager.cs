@@ -62,23 +62,24 @@ namespace SapperChain
                     {
                         Touch touch = Input.GetTouch(0);
 
-                        switch (touch.phase)
+                        if (!EventSystem.current.IsPointerOverGameObject(touch.fingerId)) 
                         {
-                            case TouchPhase.Began:
-                                if (!EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+                            switch (touch.phase)
+                            {
+                                case TouchPhase.Began:
+                                    HandleClickOrDragStart(touch.position);
                                     break;
-                                HandleClickOrDragStart(touch.position);
-                                break;
 
-                            case TouchPhase.Moved:
-                            case TouchPhase.Stationary:
-                                HandleDrag(touch.position);
-                                break;
+                                case TouchPhase.Moved:
+                                case TouchPhase.Stationary:
+                                    HandleDrag(touch.position);
+                                    break;
 
-                            case TouchPhase.Ended:
-                            case TouchPhase.Canceled:
-                                HandleClickOrDragEnd();
-                                break;
+                                case TouchPhase.Ended:
+                                case TouchPhase.Canceled:
+                                    HandleClickOrDragEnd();
+                                    break;
+                            }
                         }
                     }
                     else
