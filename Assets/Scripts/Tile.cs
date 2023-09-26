@@ -205,7 +205,7 @@ namespace SapperChain
             _firstMove = true;
         }
 
-        public bool Check() => _flag || _open;
+        public bool Check() => (_flag && _num == -1) || _open;
         public void UpdateView()
         {
             if (_flag)

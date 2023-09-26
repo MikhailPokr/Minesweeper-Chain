@@ -1238,7 +1238,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da80221a00f7bc24988734392b67991f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mobile: 0
+  mobile: 1
   _holdTime: 0.2
 --- !u!1 &1361818438
 GameObject:

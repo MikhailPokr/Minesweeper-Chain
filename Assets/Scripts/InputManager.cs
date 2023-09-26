@@ -5,7 +5,7 @@ namespace SapperChain
 {
     public class InputManager : MonoBehaviour
     {
-        [SerializeField] private bool mobile;
+        private bool mobile;
 
         private Vector2 touchStartPos;
         private float minMouseWheelDeltaForPinch = 0.1f;
@@ -14,7 +14,12 @@ namespace SapperChain
 
         public delegate void ClickHandler(bool hold, Vector2 pos);
         public static event ClickHandler Click;
-        
+
+        private void Awake()
+        {
+            RuntimePlatform platform = Application.platform;
+            mobile = platform == RuntimePlatform.Android;
+        }
 
         private void Update()
         {
@@ -62,7 +67,7 @@ namespace SapperChain
                     {
                         Touch touch = Input.GetTouch(0);
 
-                        if (!EventSystem.current.IsPointerOverGameObject(touch.fingerId)) 
+                        if (!EventSystem.current.IsPointerOverGameObject(touch.fingerId))
                         {
                             switch (touch.phase)
                             {
